@@ -9,11 +9,17 @@ exports.signUp = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ error: "Email already exists" });
+        }else{
+
         const salt = await bcrypt.genSalt(saltRounds);
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const user = await User.create({ email, password : hashedPassword });
-        res.json(user);
+        res.status(201).json(user);
+        }
     } catch (error) {
         res.json({ error: error.message });
     }
@@ -27,7 +33,7 @@ exports.signIn = async (req, res) => {
         const user = await User.findOne({ email: email });
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.json({
+            return res.status(401).json({
                 error: 'Invalid credentials'
             });
         }
@@ -39,8 +45,8 @@ exports.signIn = async (req, res) => {
         const decodedNewToken = jwt.decode(token);
         console.log('Decoded new token:', decodedNewToken);
 
-        res.json({ token });
+        res.status(200).json({ token });
     } catch (error) {
-        res.json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
 };
