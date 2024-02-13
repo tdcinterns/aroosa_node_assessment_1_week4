@@ -18,7 +18,7 @@ const start = async () => {
       await mongoose.connect(
         "mongodb+srv://nodeassess:uf4a8VRhQYYAxxxG@cluster0.b6msxto.mongodb.net/", {
         });
-      app.listen(30, () => {
+      app.listen(3000, () => {
         console.log("Server started on port 3000")
         });
     } catch (error) {
