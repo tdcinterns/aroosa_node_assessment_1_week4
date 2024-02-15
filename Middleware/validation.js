@@ -36,7 +36,7 @@ const validateUserSignUp = [
   body('email').isEmail().notEmpty(),
   body('password').notEmpty(),
   (req, res, next) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req);  //validationResult(req) returns array of error objects
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors });
     }
